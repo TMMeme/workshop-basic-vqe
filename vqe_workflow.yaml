@@ -15,10 +15,10 @@ imports:
   parameters:
     repository: "git@github.com:zapatacomputing/z-quantum-core.git"
     branch: "master"
-- name: qe-qulacs
+- name: qe-forest
   type: git
   parameters:
-    repository: "git@github.com:zapatacomputing/qe-qulacs.git"
+    repository: "git@github.com:zapatacomputing/qe-forest.git"
     branch: "master"
 
 # List the steps in the workflow
@@ -27,15 +27,16 @@ steps:
   config:
     runtime:
       language: python3
-      imports: [z-quantum-core, qe-qulacs, basic-vqe] 
+      imports: [z-quantum-core, qe-forest, basic-vqe] 
       parameters:
         file: basic-vqe/steps/solution.py
         function: vqe
   inputs:
   # The QuantumBackend we want to use
   - backend_specs: 
-      module_name: qequlacs.simulator
-      function_name: QulacsSimulator
+      module_name: qeforest.simulator
+      function_name: ForestSimulator
+      device_name: wavefunction-simulator
     type: specs
   # Coefficients of our Hamiltonian
   - coefficients: 
