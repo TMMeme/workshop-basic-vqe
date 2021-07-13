@@ -10,7 +10,7 @@ imports:
   parameters:
     repository: "git@github.com:zapatacomputing/workshop-basic-vqe.git"
     branch: "main"
-- name: z-quantum-core
+- name: z-quantum-core #z-quantum-core(コアとなるライブラリ)をワークフローで使用するために、Orquestraのワークフローでz-quantum-coreをインポートとして追加
   type: git
   parameters:
     repository: "git@github.com:zapatacomputing/z-quantum-core.git"
@@ -27,7 +27,7 @@ steps:
   config:
     runtime:
       language: python3
-      imports: [z-quantum-core, qe-qiskit, basic-vqe] 
+      imports: [z-quantum-core, qe-qiskit, basic-vqe] #使いたいライブラリはimportしたらStepのimport引数に追加する．
       parameters:
         file: basic-vqe/steps/solution.py
         function: vqe
