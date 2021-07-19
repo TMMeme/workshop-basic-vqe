@@ -1,3 +1,4 @@
+from steps.solution import expectation_from_circuit
 from typing import Dict
 import json
 from numpy.core.fromnumeric import argmin
@@ -107,3 +108,31 @@ def search(
         results.append(energy)
     #return all the calculated energies and parameter values
     return results, values
+
+def estimate_energy(backend, coef, ansatz, param, value, measure_circuit, samples):
+    #Combine the Ansatz and measurement circuits
+    circuit = ansatz + measure_circuit
+    #Replace the Parameter with a value
+    circuit = circuit.bind_parameters({param: value})
+    #Take the expectation value, multiple by the coefficient, and to our energy value
+    return coef * expectation_from_circuit(backend, circuit, samples)
+
+
+def expectation_from_circuit(
+    backend: QuantumBackend, circuit:QuantumCircuit, samples: int):
+
+    #Convert the qiskit circuit
+    zap_circuit = import_from_qiskit(circuit)
+
+    #Execute the circuit using an Orquestra backend
+    measurement = backend.run_circuit_and_measure(zap_circuit, n_samples=samples)
+    counts = measurement.get_counts()
+
+    #Estimate the expectation value based on the counts
+    expectation_value = 0
+    for bit, count in counts.items():
+        sign = +1
+        if bit =="1":
+            sign = -1
+        expectation_value += sign * count / samples
+    return expectation_value
