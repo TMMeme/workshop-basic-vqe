@@ -5,7 +5,7 @@ imports:
 - name: basic-vqe
   type: git
   parameters:
-    repository: "git@github.com:TMMeme/workshop-basic-vqe.git"
+    repository: "git@github.com:zapatacomputing/workshop-basic-vqe.git"
     branch: "main"
 - name: z-quantum-core
   type: git
@@ -26,7 +26,7 @@ steps:
       language: python3
       imports: [z-quantum-core, qe-forest, basic-vqe]
       parameters:
-        file: basic-vqe/steps/solution_demo.py
+        file: basic-vqe/steps/solution.py
         function: vqe
   inputs:
   - backend_specs:
