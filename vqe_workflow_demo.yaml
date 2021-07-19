@@ -34,6 +34,11 @@ steps:
       function_name: ForestSimulator
       device_name: wavefunction-simulator
     type: specs
+  - coefficients:
+      x: 1
+      z: 2
+      i: 1
+    type: coefficients
   outputs:
   - name: results
     type: output
