@@ -1,0 +1,44 @@
+apiVersion: io.orquestra.workflow/1.0.0
+name: basic-vqe
+
+imports:
+- name: basic-vqe
+  type: git
+  parameters:
+    repository: "git@github.com:TMMeme/workshop-basic-vqe.git"
+    branch: "main"
+- name: z-quantum-core
+  type: git
+  parameters:
+    repository: "git@github.com:zapatacomputing/z-quantum-core.git"
+    branch: "master"
+- name: qe-forest
+  type: git
+  parameters:
+    repository: "git@github.com:zapatacomputing/qe-forest.git"
+    branch: "master"
+
+#List the steps in the workflow
+steps:
+- name: run-circuit
+  config:
+    runtime:
+      language: python3
+      imports: [z-quantum-core, qe-forest, basic-vqe]
+      parameters:
+        file: basic-vqe/steps/sulution_demo.py
+        function: vqe
+  inputs:
+  - backend_specs:
+      module_name: qeforest.simulator
+      function_name: ForestSimulator
+      device_name: wavefunction-simulator
+    type: specs
+  outputs:
+  - name: results
+    type: output
+
+types:
+- specs
+- coefficients
+- output
