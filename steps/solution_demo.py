@@ -1,5 +1,6 @@
 from typing import Dict
 import json
+from numpy.core.fromnumeric import argmin
 import yaml
 import numpy as np
 from qiskit import QuantumCircuit
@@ -28,3 +29,81 @@ def build_circuits() ->Dict[str, QuantumCircuit]:
         "z": zcircuit,
     }
 
+def vqe(backend_specs, coefficients, min_value=0, max_value = 2 * np.pi):
+    if isinstance(backend_specs, str):
+        backend_specs_dict = yaml.load(backend_specs, Loader=yaml.SafeLoader)
+    else:
+        backend_specs_dict = backend_specs
+    backend = create_object(backend_specs_dict)
+
+    if isinstance(coefficients, str):
+        coefficients_dict=yaml.load(coefficients, Loader=yaml.SafeLoader)
+    else:
+        coefficients_dict = coefficients
+    
+    theta = Parameter("θ")
+    ansatz = build_ansatz(theta)
+    circuits = build_circuits()
+
+    #Search over our input parameters
+    results, values = search(
+        backend,
+        ansatz,
+        theta,
+        circuits,
+        coefficients_dict,
+        min_value=min_value,
+        max_value=max_value,
+    )
+
+    minimum_idx = np.argmin(results)
+
+    data = {
+        "minimum": {
+            "value": results[minimum_idx],
+            "theta": values[minimum_idx],
+        },
+        "results": results,
+        "values": values.tolist(),
+    }
+
+    with open("results.json", "w") as f:
+        json.dump(data, f)
+
+def search(
+    backend: QuantumBackend,
+    ansatz: QuantumCircuit,
+    param: Parameter,
+    circuits: Dict[str, QuantumCircuit],
+    coefficients: Dict[str, int],
+    min_value=0,
+    max_value=1,
+    samples=10000,
+):
+    
+    #Create our search space
+    values = np.linspace(min_value, max_value, 100)
+
+    results = []
+
+    #Loop over all points in out search space
+    #In real VQE workloads, you want to use an optimizer here
+    for v in values:
+        energy =0
+        #Loop over each coefficient
+        for k, coef in coefficients.items():
+            # Skip if the coefficient is 0
+            if coef == 0:
+                continue
+
+            #Only run a circuit if we are not considering the "I" part of the Hamiltonian
+            if k !="i":
+                energy += estimate_energy(
+                    backend, coef, ansatz, param, v, circuits[k], samples
+                )
+            else:
+                energy += coef
+        #Keep track of this total energy
+        results.append(energy)
+    #return all the calculated energies and parameter values
+    return results, values
