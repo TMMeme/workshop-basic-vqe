@@ -26,7 +26,7 @@ steps:
       language: python3
       imports: [z-quantum-core, qe-forest, basic-vqe]
       parameters:
-        file: basic-vqe/steps/sulution_demo.py
+        file: basic-vqe/steps/solution_demo.py
         function: vqe
   inputs:
   - backend_specs:
