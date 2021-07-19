@@ -17,7 +17,6 @@ def build_ansatz(param: Parameter) -> QuantumCircuit:
 
 
 # build_circuits creates the circuits required to convert to the correct computational basis
-
 def build_circuits() -> Dict[str, QuantumCircuit]:
     # The Z circuit is already in the right computational basis
     zcircuit = QuantumCircuit(1, 1)
