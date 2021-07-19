@@ -1,7 +1,5 @@
-from steps.solution import expectation_from_circuit
 from typing import Dict
 import json
-from numpy.core.fromnumeric import argmin
 import yaml
 import numpy as np
 from qiskit import QuantumCircuit
@@ -119,7 +117,9 @@ def estimate_energy(backend, coef, ansatz, param, value, measure_circuit, sample
 
 
 def expectation_from_circuit(
-    backend: QuantumBackend, circuit:QuantumCircuit, samples: int):
+    backend: QuantumBackend, circuit:QuantumCircuit, 
+    samples: int
+):
 
     #Convert the qiskit circuit
     zap_circuit = import_from_qiskit(circuit)
