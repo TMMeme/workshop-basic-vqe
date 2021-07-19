@@ -10,15 +10,15 @@ imports:
   parameters:
     repository: "git@github.com:zapatacomputing/workshop-basic-vqe.git"
     branch: "main"
-- name: z-quantum-core #z-quantum-core(コアとなるライブラリ)をワークフローで使用するために、Orquestraのワークフローでz-quantum-coreをインポートとして追加
+- name: z-quantum-core
   type: git
   parameters:
     repository: "git@github.com:zapatacomputing/z-quantum-core.git"
     branch: "master"
-- name: qe-qiskit
+- name: qe-qulacs
   type: git
   parameters:
-    repository: "git@github.com:zapatacomputing/qe-qiskit.git"
+    repository: "git@github.com:zapatacomputing/qe-qulacs.git"
     branch: "master"
 
 # List the steps in the workflow
@@ -27,18 +27,15 @@ steps:
   config:
     runtime:
       language: python3
-      imports: [z-quantum-core, qe-qiskit, basic-vqe] #使いたいライブラリはimportしたらStepのimport引数に追加する．
+      imports: [z-quantum-core, qe-qulacs, basic-vqe] 
       parameters:
         file: basic-vqe/steps/solution.py
         function: vqe
   inputs:
   # The QuantumBackend we want to use
   - backend_specs: 
-      module_name: qeqiskit.backend
-      function_name: QiskitBackend
-      device_name: ibmq_lima
-      n_samples: 8192
-      api_token: "a334d9575b60fd0510d5485f4f9c403ee4ae4908a33f10caf1ac5d91df3ce94b7db3672ea6a36afe743af35b72f21b6207e66f513e0c0b64a3cb3cedbf208ab6"
+      module_name: qequlacs.simulator
+      function_name: QulacsSimulator
     type: specs
   # Coefficients of our Hamiltonian
   - coefficients: 
