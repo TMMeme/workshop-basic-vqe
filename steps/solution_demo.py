@@ -4,7 +4,7 @@ import yaml
 import numpy as np
 from qiskit import QuantumCircuit
 from qiskit.circuit import Parameter
-from zquantum.core.wip.circuits import import_from_qiskit
+from zquantum.core.wip.circuits import import_from_qiskit #wipの中に入っていたのか
 from zquantum.core.utils import create_object
 from zquantum.core.interfaces.backend import QuantumBackend
 
@@ -16,7 +16,7 @@ def build_ansatz(param: Parameter) -> QuantumCircuit:
     return ansatz
 
 
-# build_circuits creates the circuits required to convert to the correct computational basis
+    #build_circuits creates the circuits required to convert to the correct computational basis
 
 def build_circuits() -> Dict[str, QuantumCircuit]:
     # The Z circuit is already in the right computational basis
