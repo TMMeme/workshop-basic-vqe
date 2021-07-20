@@ -16,8 +16,10 @@ def build_ansatz(param: Parameter) -> QuantumCircuit:
     return ansatz
 
 
-    #build_circuits creates the circuits required to convert to the correct computational basis
 
+
+
+#build_circuits creates the circuits required to convert to the correct computational basis
 def build_circuits() -> Dict[str, QuantumCircuit]:
     # The Z circuit is already in the right computational basis
     zcircuit = QuantumCircuit(1, 1)
@@ -89,7 +91,7 @@ def vqe(backend_specs, coefficients, min_value=0, max_value=2 * np.pi):
     with open("results.json", "w") as f:
         json.dump(data, f)
 
-
+#
 # In this example, we just search over a linear space of parameters
 # backend: is an Orquestra backend
 # ansatz: A parameterized Qiskit circuit
@@ -99,6 +101,8 @@ def vqe(backend_specs, coefficients, min_value=0, max_value=2 * np.pi):
 # min_value: value to start our search
 # max_value: value to end our search
 # samples: number of samples from the quantum backend
+#In our search() function, we build our search space and loop over it.
+#実際は最適化手法を用いるがここではそうはしない
 def search(
     backend: QuantumBackend,
     ansatz: QuantumCircuit,
@@ -136,7 +140,7 @@ def search(
     # Return all the calculated energies and parameter values
     return results, values
 
-
+#There’s a helper function to estimate the energy for the Hamiltonian.
 def estimate_energy(backend, coef, ansatz, param, value, measure_circuit, samples):
     # Combine the Ansatz and measurement circuits
     circuit = ansatz + measure_circuit
